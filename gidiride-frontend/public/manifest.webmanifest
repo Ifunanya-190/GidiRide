@@ -1,0 +1,17 @@
+{
+  "name": "GidiRide",
+  "short_name": "GidiRide",
+  "description": "Role-based ride-hailing dashboard for Lagos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07100f",
+  "theme_color": "#07100f",
+  "icons": [
+    {
+      "src": "/gidiride-logo-transparent.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

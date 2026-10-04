@@ -1,0 +1,675 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #06100e;
+  --asphalt: #0b1312;
+  --road: #121d1a;
+  --road-2: #17231f;
+  --chalk: #fff9ec;
+  --paper: #f7efd9;
+  --muted: #a8b7b0;
+  --muted-2: #73847d;
+  --line: rgba(255, 249, 236, 0.14);
+  --yellow: #f6b91a;
+  --green: #18d463;
+  --red: #ff5b4f;
+  --blue: #82c7ff;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { @apply min-h-full bg-gidi-ink; }
+  body {
+    @apply min-h-screen m-0 bg-gidi-ink text-gidi-chalk antialiased;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 18% 14%, rgba(246, 185, 26, 0.08), transparent 28rem),
+      radial-gradient(circle at 84% 12%, rgba(24, 212, 99, 0.08), transparent 22rem),
+      linear-gradient(135deg, #07100f 0%, #0d1715 48%, #050908 100%);
+  }
+  body::before {
+    content: "";
+    @apply pointer-events-none fixed inset-0 opacity-[.14];
+    background-image: linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 74px 74px;
+    mask-image: radial-gradient(circle at center, black, transparent 82%);
+  }
+  button, input, textarea, select { font: inherit; }
+  button { @apply cursor-pointer; }
+  button:disabled { @apply cursor-not-allowed opacity-60; }
+  a { @apply text-inherit no-underline; }
+  ::selection { @apply bg-gidi-yellow text-gidi-ink; }
+  input, textarea, select {
+    @apply w-full rounded-2xl border-2 border-white/15 bg-gidi-ink px-4 py-3 text-gidi-chalk outline-none transition focus:border-gidi-yellow focus:ring-4 focus:ring-gidi-yellow/15;
+  }
+}
+
+@layer components {
+  .eyebrow { @apply mb-3 text-xs font-black uppercase tracking-[.16em] text-gidi-yellow; }
+  .muted { @apply text-gidi-chalk/60; }
+  .span-all { @apply col-span-full; }
+
+  .btn { @apply inline-flex min-h-11 items-center justify-center rounded-2xl border-2 border-white/25 bg-gidi-road px-4 py-3 font-black text-gidi-chalk transition disabled:opacity-60; box-shadow: 0 10px 0 rgba(0,0,0,.22); }
+  .btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 8px 12px 0 rgba(0,0,0,.28); }
+  .btn:active:not(:disabled) { transform: translate(0,0); box-shadow: 0 5px 0 rgba(0,0,0,.3); }
+  .btn-primary { @apply border-gidi-yellow/70 bg-gidi-yellow text-gidi-ink; }
+  .btn-danger { @apply border-gidi-red/50 bg-gidi-red/15 text-red-100; }
+  .btn-quiet { @apply bg-white/[.06] text-gidi-chalk shadow-none; }
+  .btn-small { @apply min-h-9 rounded-xl px-3 py-2 text-sm; }
+
+  .alert { @apply my-4 rounded-2xl border-2 px-4 py-3 font-extrabold; }
+  .alert.danger { @apply border-gidi-red/50 bg-gidi-red/10 text-red-100; }
+  .alert.success { @apply border-gidi-green/40 bg-gidi-green/10 text-green-100; }
+
+  .panel-card, .toolbar-card, .stats-card, .table-wrap, .dashboard-hero, .auth-poster, .auth-panel, .ban-modal, .role-shell, .not-found,
+  .booking-panel, .fare-card, .tracking-map-card, .tracking-panel, .empty-current-ride,
+  .driver-hero, .driver-stat-card, .rider-hero, .rider-feature-card, .wallet-balance-card {
+    @apply min-w-0 border-2 border-white/10 bg-gidi-road/95 shadow-gidi;
+  }
+  .panel-card { @apply rounded-[1.75rem] p-5; }
+  .toolbar-card { @apply rounded-[1.75rem] p-4; }
+  .stats-card { @apply relative overflow-hidden rounded-[1.65rem] p-5; }
+  .stats-card p { @apply m-0 mb-2 font-black text-gidi-chalk/60; }
+  .stats-card strong { @apply block text-3xl font-black tracking-[-.06em] text-gidi-chalk md:text-4xl; }
+  .stats-card small { @apply text-gidi-chalk/55; }
+  .stats-card-head { @apply mb-4 flex items-center justify-between; }
+  .stats-pin { @apply inline-block h-3 w-3 rounded-full bg-sky-300; }
+  .stats-icon-badge { @apply grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[.05] text-gidi-yellow; }
+  .stats-card.green .stats-pin { @apply bg-gidi-green; }
+  .stats-card.yellow .stats-pin { @apply bg-gidi-yellow; }
+  .stats-card.red .stats-pin { @apply bg-gidi-red; }
+
+  .splash-screen { @apply relative grid min-h-screen place-items-center overflow-hidden bg-[#050908]; }
+  .splash-screen::before { content: ""; @apply absolute h-[44rem] w-[44rem] rounded-full; background: radial-gradient(circle, rgba(246,185,26,.12), transparent 63%); animation: pulse 1.8s ease-out infinite; }
+  .splash-orbit { @apply absolute h-72 w-72 rounded-full border border-gidi-yellow/25 md:h-96 md:w-96; box-shadow: 0 0 80px rgba(246,185,26,.08), inset 0 0 80px rgba(24,212,99,.05); animation: spin 5.5s linear infinite; }
+  .splash-orbit::after { content: ""; @apply absolute -top-2 left-1/2 h-4 w-4 rounded-full bg-gidi-green; box-shadow: 0 0 24px rgba(24,212,99,.9); }
+  .splash-card {
+    @apply relative z-10 grid w-[min(88vw,430px)] place-items-center rounded-[2rem] border border-white/15 px-6 py-8;
+    background: linear-gradient(165deg, rgba(255,255,255,.08), rgba(255,255,255,.015) 45%, rgba(9,15,13,.35));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 24px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.1);
+    animation: rise 650ms cubic-bezier(.2,.8,.2,1) both;
+  }
+  .splash-card img { @apply w-[min(58vw,245px)]; filter: drop-shadow(0 22px 32px rgba(0,0,0,.58)); }
+  .splash-copy { @apply mt-2 text-center; }
+  .splash-copy strong { @apply block text-4xl font-black tracking-[-.08em] md:text-6xl; }
+  .splash-copy small { @apply mt-2 block font-black text-gidi-chalk/55; }
+  .splash-progress { @apply mt-6 h-2 w-56 overflow-hidden rounded-full bg-white/10; }
+  .splash-progress i { @apply block h-full rounded-full bg-gradient-to-r from-gidi-green via-gidi-yellow to-gidi-green; animation: loadingBar 1.3s ease-in-out infinite; }
+  .tire-track { @apply absolute bottom-[12%] h-28 w-[140%] opacity-25; transform: rotate(-6deg); background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,.35) 18px 26px, transparent 26px 42px); mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent); }
+
+  .auth-shell { @apply mx-auto grid min-h-screen w-[min(1180px,calc(100vw-2rem))] items-center gap-6 py-6 lg:grid-cols-[1.02fr_.9fr]; }
+  .auth-poster {
+    @apply relative flex min-h-[690px] flex-col justify-between overflow-hidden rounded-[2.6rem] border-white/15 p-8;
+    background: linear-gradient(165deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 40%, rgba(9,15,13,.35)), rgba(18,29,26,.5);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: 0 24px 80px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.09);
+  }
+  .auth-poster::before { content: ""; @apply pointer-events-none absolute inset-5 rounded-[2rem] border-2 border-dashed border-gidi-yellow/30; }
+  .auth-poster::after { content: ""; @apply pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full border-[44px] border-gidi-green/10; }
+  .poster-mark {
+    content: "";
+    @apply pointer-events-none absolute -bottom-10 -right-24 h-[34rem] w-[34rem];
+    background: url('/gidiride-logo-transparent.png') no-repeat center / contain;
+    opacity: .22;
+    filter: saturate(1.15);
+    transform: rotate(-8deg);
+    z-index: 0;
+  }
+  .poster-content { @apply relative z-10 flex flex-1 flex-col justify-between; }
+  .compact-poster { @apply min-h-[520px]; }
+  .compact-poster .poster-mark { @apply -bottom-24 -right-28 h-[26rem] w-[26rem]; }
+  .auth-logo { @apply relative z-10 self-center w-[min(280px,72%)]; filter: drop-shadow(0 20px 26px rgba(0,0,0,.4)); }
+  .auth-poster h1, .auth-panel h2, .dashboard-hero h2, .section-heading h2, .panel-card h3, .placeholder-page h2, .role-shell h1, .not-found h1 { @apply m-0 leading-none tracking-[-.06em]; }
+  .auth-poster h1 { @apply max-w-3xl text-3xl font-black md:text-5xl; }
+  .auth-poster p:not(.eyebrow), .auth-panel .muted, .dashboard-hero p, .section-heading p, .panel-card p, .role-shell p, .not-found p { @apply leading-7 text-gidi-chalk/60; }
+  .poster-ticket { @apply relative z-10 grid items-center gap-3 rounded-3xl border-2 border-white/15 bg-black/40 p-4 md:grid-cols-[1fr_repeat(3,auto)]; }
+  .poster-ticket span { @apply text-gidi-chalk/55; }
+  .poster-ticket strong { @apply rounded-full bg-gidi-chalk px-3 py-1 font-black text-gidi-ink; }
+  .auth-panel {
+    @apply relative overflow-hidden rounded-[2.2rem] border-white/15 p-6 md:p-9;
+    background: linear-gradient(165deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 45%, rgba(9,15,13,.4));
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: 0 24px 80px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.09);
+  }
+  .wide-panel { @apply max-w-2xl; }
+  .mobile-brand { @apply mb-4 hidden items-center gap-3 text-xl font-black; }
+  .mobile-brand img { @apply w-12; }
+  .auth-panel h2 { @apply text-3xl font-black md:text-4xl; }
+  .stack-form, .kyc-form, .rider-settings-form, .payout-form, .pricing-form { @apply mt-5 grid gap-4; }
+  .stack-form label, .ban-modal label, .search-box, .kyc-form label, .rider-settings-form label, .payout-form label, .topup-card label, .add-card-card label { @apply grid gap-2; }
+  .stack-form label span, .ban-modal label span, .search-box span, .kyc-form label span, .rider-settings-form label span, .payout-form label span, .topup-card label span, .add-card-card label span { @apply text-sm font-black text-gidi-chalk; }
+  .two-grid { @apply grid min-w-0 gap-4 md:grid-cols-2; }
+  .two-grid > * { @apply min-w-0; }
+  .auth-footnote { @apply mt-5 flex items-center gap-2 text-gidi-chalk/60; }
+  .auth-footnote a { @apply font-black text-gidi-yellow; }
+  .tiny-note { @apply text-sm leading-6 text-gidi-chalk/45; }
+  .role-picker, .ride-type-grid { @apply grid gap-3 rounded-3xl border-2 border-white/10 p-4; }
+  .role-picker legend, .ride-type-grid legend { @apply px-2 font-black text-gidi-yellow; }
+  .role-picker label, .ride-type-grid label { @apply grid grid-cols-[auto_1fr] items-start gap-2 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .role-picker label.selected, .ride-type-grid label.selected { @apply border-gidi-yellow/70 bg-gidi-yellow/10; }
+  .role-picker input, .ride-type-grid input { @apply mt-1 w-auto; }
+  .role-picker small, .ride-type-grid small { @apply col-start-2 text-gidi-chalk/60; }
+
+  .admin-shell, .driver-app-shell, .rider-app-shell { @apply grid min-h-screen overflow-x-hidden lg:grid-cols-[320px_minmax(0,1fr)]; }
+  .admin-sidebar, .driver-rail, .rider-rail { @apply sticky top-0 flex min-h-screen flex-col gap-5 self-stretch border-r-2 border-white/10 bg-black/70 p-5 backdrop-blur; }
+  .admin-main, .driver-main, .rider-main { @apply min-w-0 max-w-full overflow-x-clip px-4 pb-12 pt-5 md:px-7; }
+  .brand-lockup { @apply flex items-center gap-3 rounded-3xl border-2 border-white/10 p-3; }
+  .brand-lockup img { @apply w-16; }
+  .brand-lockup strong { @apply block text-xl font-black tracking-[-.04em]; }
+  .brand-lockup span { @apply text-sm text-gidi-chalk/60; }
+  .sidebar-nav, .driver-nav, .rider-nav { @apply grid gap-2 overflow-y-auto pr-1; max-height: calc(100vh - 230px); }
+  .sidebar-nav::-webkit-scrollbar, .driver-nav::-webkit-scrollbar, .rider-nav::-webkit-scrollbar { width: 5px; }
+  .sidebar-nav::-webkit-scrollbar-thumb, .driver-nav::-webkit-scrollbar-thumb, .rider-nav::-webkit-scrollbar-thumb { background: rgba(246,185,26,.35); border-radius: 999px; }
+  .sidebar-nav a, .driver-nav a, .rider-nav a { @apply flex items-center gap-3 rounded-2xl border-2 border-transparent px-4 py-3 font-black text-gidi-chalk/60 transition hover:border-gidi-yellow/40 hover:bg-gidi-yellow/10 hover:text-gidi-chalk; }
+  .nav-icon { @apply h-5 w-5 shrink-0 text-gidi-yellow/75; }
+  .driver-nav .nav-icon { @apply text-gidi-green/75; }
+  .driver-nav a:hover, .driver-nav a.active { @apply border-gidi-green/40 bg-gidi-green/10 text-gidi-chalk; }
+  .sidebar-nav a.active, .rider-nav a.active { @apply border-gidi-yellow/40 bg-gidi-yellow/10 text-gidi-chalk; }
+  .sidebar-nav a span { @apply mr-3 text-xs text-gidi-yellow; }
+  .sidebar-note, .driver-rail-card, .rider-safety-card { @apply hidden; }
+  .sidebar-note { @apply border-gidi-green/25 bg-gidi-green/10; }
+  .driver-rail-card { @apply border-gidi-yellow/25 bg-gidi-yellow/10; }
+  .rider-safety-card { @apply border-gidi-green/25 bg-gidi-green/10; }
+  .sidebar-note span, .driver-rail-card span, .rider-safety-card span { @apply font-black text-gidi-green; }
+  .driver-rail-card span { @apply text-gidi-yellow; }
+  .sidebar-note p, .driver-rail-card p, .rider-safety-card p { @apply mt-2 leading-6 text-gidi-chalk/60; }
+  .admin-topbar, .driver-topbar, .rider-topbar { @apply mb-4 flex items-center justify-between gap-4; }
+  .admin-topbar h1, .driver-topbar h1, .rider-topbar h1 { @apply m-0 text-2xl font-black tracking-[-.04em] md:text-4xl; }
+  .topbar-user { @apply flex items-center gap-3 rounded-2xl border-2 border-white/10 bg-white/[.04] p-2; }
+  .topbar-user span { @apply font-black text-gidi-chalk; }
+  .demo-banner { @apply mb-4 rounded-2xl border-2 border-gidi-yellow/30 bg-gidi-yellow/10 p-4 leading-6 text-yellow-100; }
+  .demo-banner code { @apply rounded-lg bg-black/30 px-2 py-1 text-gidi-chalk; }
+
+  .page-section { @apply grid gap-5; }
+  .section-heading { @apply flex items-end justify-between gap-4; }
+  .section-heading h2 { @apply text-2xl font-black md:text-4xl; }
+  .section-heading h3, .panel-card h3 { @apply text-xl font-black tracking-[-.03em] md:text-2xl; }
+  .dashboard-hero { @apply relative grid min-h-[270px] items-end overflow-hidden rounded-[2rem] p-6 md:grid-cols-[1fr_minmax(210px,280px)]; }
+  .dashboard-hero::after { content: ""; @apply absolute -bottom-32 -right-28 h-[28rem] w-[28rem] rounded-full border-[54px] border-gidi-yellow/10; }
+  .dashboard-hero h2 { @apply max-w-3xl text-3xl font-black md:text-5xl; }
+  .hero-meter { @apply relative z-10 grid gap-1 rounded-[1.75rem] bg-gidi-yellow p-5 text-gidi-ink; box-shadow: 11px 11px 0 rgba(0,0,0,.25); }
+  .hero-meter strong { @apply text-6xl font-black leading-none tracking-[-.08em]; }
+  .hero-meter span, .hero-meter small { @apply font-black; }
+  .stats-grid { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-4; }
+  .split-grid { @apply grid gap-4 xl:grid-cols-[1.1fr_.9fr]; }
+  .activity-list { @apply mt-4 grid gap-3; }
+  .activity-item { @apply grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .activity-item span { @apply h-9 w-3 rounded-full bg-sky-300; }
+  .activity-item.green span { @apply bg-gidi-green; } .activity-item.yellow span { @apply bg-gidi-yellow; } .activity-item.red span { @apply bg-gidi-red; }
+  .activity-item p { @apply m-0 text-gidi-chalk/60; }
+  .activity-item small { @apply text-gidi-chalk/45; }
+  .road-card { background-image: linear-gradient(90deg, transparent, rgba(255,255,255,.04) 48%, rgba(246,185,26,.3) 49%, rgba(246,185,26,.3) 51%, rgba(255,255,255,.04) 52%, transparent); }
+
+  .user-heading { @apply items-center; }
+  .count-stamp { @apply grid h-24 w-24 place-items-center content-center rounded-full border-[6px] border-black/25 bg-gidi-green text-gidi-ink; }
+  .count-stamp strong { @apply text-3xl font-black leading-none; }
+  .count-stamp span { @apply text-xs font-black uppercase; }
+  .search-box { @apply grid gap-2; }
+  .toolbar-card { @apply grid items-end gap-4 md:grid-cols-[minmax(240px,1fr)_auto]; }
+  .segmented { @apply flex rounded-2xl border-2 border-white/10 bg-gidi-ink p-1; }
+  .segmented button { @apply rounded-xl border-0 bg-transparent px-4 py-2 font-black capitalize text-gidi-chalk/60; }
+  .segmented button.active { @apply bg-gidi-yellow text-gidi-ink; }
+  .table-wrap { @apply overflow-x-auto rounded-[1.75rem]; }
+  .gidi-table { @apply w-full border-collapse; min-width: 880px; }
+  .gidi-table th, .gidi-table td { @apply border-b border-white/10 p-4 text-left align-middle; }
+  .gidi-table th { @apply bg-white/[.03] text-xs font-black uppercase tracking-[.12em] text-gidi-chalk/55; }
+  .gidi-table tr:last-child td { @apply border-b-0; }
+  .gidi-table tr.is-banned { @apply bg-gidi-red/5; }
+  .right { @apply text-right; }
+  .person-cell { @apply flex items-center gap-3; }
+  .person-cell > span { @apply grid h-11 w-11 place-items-center rounded-2xl bg-gidi-yellow font-black text-gidi-ink; box-shadow: 5px 5px 0 rgba(0,0,0,.24); }
+  .person-cell strong, .driver-card-mini strong { @apply block; }
+  .person-cell small, .stacked-text small, .ban-reason { @apply text-gidi-chalk/45; }
+  .stacked-text { @apply grid gap-1; }
+  .status-pill, .kyc { @apply inline-flex w-max shrink-0 self-start items-center rounded-full px-3 py-1 text-xs font-black capitalize; }
+  .status-pill.active { @apply border border-gidi-green/40 bg-gidi-green/15 text-green-100; }
+  .status-pill.banned { @apply border border-gidi-red/40 bg-gidi-red/15 text-red-100; }
+  .status-pill.sample-pill { @apply ml-2 border border-white/20 bg-white/10 text-gidi-chalk/70 normal-case; }
+  .presence-pill { @apply inline-flex w-max items-center gap-2 rounded-full border border-white/10 bg-white/[.04] px-3 py-1 text-xs font-bold text-gidi-chalk/70; }
+  .presence-pill i { @apply h-2 w-2 rounded-full bg-gidi-chalk/40; }
+  .presence-pill.online i { @apply bg-gidi-green; box-shadow: 0 0 0 3px rgb(24 212 99 / 0.25); }
+  .presence-pill.recent i { @apply bg-gidi-yellow; }
+  .presence-pill.offline i { @apply bg-gidi-chalk/30; }
+  .timeline-modal { @apply max-h-[85vh] overflow-y-auto; }
+  .timeline-list { @apply grid gap-4 mt-3; }
+  .timeline-entry { @apply relative grid grid-cols-[auto_1fr] gap-3 border-b border-white/5 pb-4; }
+  .timeline-entry:last-child { @apply border-b-0 pb-0; }
+  .timeline-entry strong { @apply block; }
+  .timeline-entry p { @apply text-sm text-gidi-chalk/60; }
+  .timeline-entry small { @apply text-xs text-gidi-chalk/40; }
+  .timeline-dot { @apply mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-white/20; }
+  .timeline-entry.warning .timeline-dot { @apply bg-gidi-yellow; }
+  .timeline-entry.ban .timeline-dot { @apply bg-gidi-red; }
+  .timeline-entry.ride .timeline-dot { @apply bg-gidi-green; }
+  .kyc-detail-grid { @apply mt-2 rounded-2xl bg-black/20 p-4; }
+  .field-error { @apply text-gidi-red font-bold; }
+  .field-help { @apply text-gidi-chalk/50; }
+  input[aria-invalid="true"] { @apply border-gidi-red/60; }
+  .kyc.approved { @apply bg-gidi-green/15 text-green-100; }
+  .kyc.pending { @apply bg-gidi-yellow/15 text-yellow-100; }
+  .kyc.rejected { @apply bg-gidi-red/15 text-red-100; }
+  .kyc.not_submitted { @apply bg-white/[.07] text-gidi-chalk/55; }
+  .ban-reason { @apply mt-1 block max-w-[220px] leading-5; }
+  .empty-state { @apply grid place-items-center gap-2 p-8 text-center font-black text-gidi-chalk/55; }
+  .empty-state::before { content: "◇"; @apply grid h-12 w-12 place-items-center rounded-2xl border-2 border-dashed border-gidi-yellow/35 text-2xl text-gidi-yellow/80; }
+  .modal-backdrop { @apply fixed inset-0 z-30 grid place-items-center bg-black/70 p-4; }
+  .ban-modal { @apply w-[min(520px,100%)] rounded-[2rem] p-5; }
+  .ban-modal h3 { @apply m-0 text-4xl font-black tracking-[-.06em]; }
+  .ban-modal p { @apply leading-7 text-gidi-chalk/60; }
+  .modal-actions { @apply mt-4 flex justify-end gap-3; }
+  .loading-block { @apply grid min-h-[260px] place-items-center content-center gap-4 text-gidi-chalk/60; }
+  .skeleton-card { @apply h-28 w-[min(560px,92vw)] rounded-[2rem] border-2 border-white/10 bg-gradient-to-r from-white/[.04] via-white/[.10] to-white/[.04]; background-size: 220% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+  .skeleton-card.wide { @apply h-32; }
+  .skeleton-grid { @apply grid w-[min(560px,92vw)] grid-cols-3 gap-3; }
+  .skeleton-grid span { @apply h-20 rounded-3xl border border-white/10 bg-white/[.05]; animation: pulse 1.8s ease-in-out infinite; }
+  .loading-copy { @apply text-sm font-black uppercase tracking-[.14em] text-gidi-chalk/45; }
+  .placeholder-page { @apply grid min-h-[460px] place-items-center content-center text-center; }
+  .placeholder-page img { @apply w-44; }
+  .placeholder-page h2 { @apply text-4xl md:text-6xl; }
+  .road-label { @apply font-black text-gidi-green; }
+
+  .role-shell, .not-found { @apply mx-auto my-4 grid min-h-[calc(100vh-2rem)] w-[min(760px,calc(100vw-2rem))] place-items-center content-center rounded-[2.4rem] p-8 text-center; }
+  .role-shell img, .not-found img { @apply w-[min(260px,75vw)]; filter: drop-shadow(0 18px 20px rgba(0,0,0,.4)); }
+  .role-shell h1, .not-found h1 { @apply text-4xl md:text-6xl; }
+  .lane-card { @apply my-4 rounded-3xl border-2 border-dashed border-gidi-yellow/40 bg-gidi-yellow/10 p-4 text-gidi-chalk; }
+
+  .driver-page-grid { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-4; }
+  .driver-hero { @apply relative col-span-full grid items-end gap-4 overflow-hidden rounded-[2rem] p-6 md:grid-cols-[1fr_minmax(220px,300px)]; background: linear-gradient(135deg, rgba(24,212,99,.1), rgba(18,29,26,.96)); }
+  .driver-hero::after { content: ""; @apply absolute bottom-8 -right-32 h-20 w-[36rem] opacity-50; transform: rotate(-8deg); background: repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 30px, rgba(246,185,26,.32) 30px 42px, rgba(255,255,255,.04) 42px 72px); }
+  .driver-hero h2 { @apply relative z-10 m-0 text-3xl font-black leading-none tracking-[-.04em] md:text-5xl; }
+  .driver-hero p { @apply relative z-10 leading-7 text-gidi-chalk/60; }
+  .star-rating-input { display: flex; gap: .25rem; }
+  .star-rating-input button { display: grid; place-items: center; padding: .25rem; color: rgba(255,249,236,.25); transition: color 120ms ease, transform 120ms ease; }
+  .star-rating-input button:hover { transform: scale(1.12); }
+  .star-rating-input button.filled { color: #f6b91a; }
+  .star-rating-input button svg { fill: currentColor; stroke: none; }
+  .star-rating-display { display: inline-flex; gap: .1rem; vertical-align: middle; }
+  .star-rating-display svg { color: rgba(255,249,236,.25); fill: currentColor; stroke: none; }
+  .star-rating-display svg.filled { color: #f6b91a; }
+
+  .status-switch { position: relative; display: inline-flex; height: 2.25rem; width: 4.25rem; flex-shrink: 0; cursor: pointer; }
+  .status-switch input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; width: 100%; height: 100%; }
+  .status-switch .track { display: block; height: 100%; width: 100%; border-radius: 9999px; border: 2px solid rgba(255,255,255,.15); background: rgba(255,255,255,.12); transition: background-color 150ms ease, border-color 150ms ease; }
+  .status-switch .knob { position: absolute; top: 3px; left: 3px; height: 1.65rem; width: 1.65rem; border-radius: 9999px; background: #fff9ec; box-shadow: 0 4px 10px rgba(0,0,0,.35); transition: transform 150ms ease; }
+  .status-switch input:checked + .track { background: rgb(24 212 99 / 0.9); border-color: rgba(24,212,99,.9); }
+  .status-switch input:checked + .track .knob { transform: translateX(2rem); }
+  .status-switch input:disabled + .track { opacity: .5; cursor: not-allowed; }
+  .status-switch-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .status-switch-row strong { display: block; font-size: 1.125rem; font-weight: 900; letter-spacing: -.02em; }
+  .status-switch-row small { color: rgb(255 249 236 / 0.55); }
+
+  .online-switch-card { @apply relative z-10 grid gap-3 rounded-[1.75rem] border-2 border-white/15 bg-gidi-ink p-4; }
+  .online-switch-card span { @apply w-max rounded-full bg-white/[.08] px-3 py-2 font-black; }
+  .online-switch-card.online span { @apply bg-gidi-green/20 text-green-100; }
+  .online-switch-card.offline span { @apply bg-gidi-red/20 text-red-100; }
+  .online-switch-card small { @apply text-gidi-chalk/60; }
+  .driver-stat-card { @apply grid min-h-[150px] content-between rounded-[1.6rem] p-5; }
+  .driver-stat-card span { @apply font-black text-gidi-chalk/60; }
+  .driver-stat-card strong { @apply text-3xl font-black tracking-[-.06em] md:text-4xl; }
+  .driver-checklist ul { @apply columns-1 pl-5 leading-8 text-gidi-chalk/60 md:columns-2; }
+  .driver-profile-section { @apply grid gap-5; }
+  .profile-summary-grid { @apply grid gap-4 lg:grid-cols-2; }
+  .profile-summary-grid .panel-card:last-child { @apply lg:col-span-2; }
+  .profile-summary-grid .two-grid div { @apply grid gap-1; }
+  .label-muted { @apply text-xs font-bold uppercase tracking-wide text-gidi-chalk/50; }
+  .prefix-input { @apply relative; }
+  .prefix-input span { @apply pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-black text-gidi-chalk/45; }
+  .prefix-input input { @apply pl-10; }
+  .modal-close { @apply absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[.06] text-gidi-chalk/70 transition hover:bg-white/[.14] hover:text-gidi-chalk; }
+  .modal-close.static { position: static; }
+  .payments-grid { @apply grid gap-4 xl:grid-cols-[1fr_360px] items-start; }
+  .saved-method-row { @apply flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[.03] p-4; }
+  .saved-method-row span { @apply block text-sm text-gidi-chalk/55; }
+  .method-list { @apply grid gap-3 mt-4; }
+  .wallet-hint { @apply block text-gidi-chalk/45; }
+  .ban-modal { @apply relative; }
+  .upload-grid { @apply grid gap-4 lg:grid-cols-3; }
+  .document-list { @apply mt-4 grid gap-3; }
+  .document-list div { @apply flex justify-between gap-4 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .document-list span, .document-list p { @apply m-0 text-gidi-chalk/60; }
+  .request-grid { @apply grid gap-4 xl:grid-cols-2; }
+  .request-card { @apply grid gap-4 rounded-[1.75rem] border-2 border-white/10 bg-gidi-road/95 p-5 shadow-gidi; }
+  .request-card.accepted { @apply border-gidi-green/40; }
+  .request-card.declined { @apply opacity-60; }
+  .request-card.waiting { @apply border-gidi-yellow/35; }
+  .request-card.waiting::before { content: "Live queue"; @apply w-max rounded-full bg-gidi-yellow px-2 py-1 text-xs font-black text-gidi-ink; }
+  .request-card-head, .request-meta, .request-actions { @apply flex items-center justify-between gap-3; }
+  .request-card-head span { @apply rounded-full bg-gidi-yellow px-3 py-1 font-black text-gidi-ink; }
+  .request-card-head strong { @apply text-2xl font-black; }
+  .request-card h3 { @apply m-0 text-2xl font-black tracking-[-.04em]; }
+  .route-stack { @apply grid gap-3; }
+  .route-stack p { @apply m-0 grid gap-1 leading-6 text-gidi-chalk/60; }
+  .route-stack b { @apply text-gidi-chalk; }
+  .request-meta span { @apply rounded-full border border-white/15 px-3 py-1 font-black text-gidi-chalk/60; }
+  .payout-grid { @apply grid gap-4 xl:grid-cols-[1.2fr_.8fr]; }
+
+  .feature-hero { @apply relative grid gap-4 overflow-hidden rounded-[2rem] p-6 md:grid-cols-[auto_1fr] md:items-center; background: linear-gradient(135deg, rgba(246,185,26,.11), rgba(18,29,26,.96)); }
+  .feature-hero::after { content: ""; @apply pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full border-[40px] border-gidi-yellow/10; }
+  .feature-hero-icon { @apply relative z-10 grid h-14 w-14 place-items-center rounded-2xl bg-gidi-yellow text-gidi-ink; box-shadow: 6px 6px 0 rgba(0,0,0,.25); }
+  .feature-hero-icon.green { @apply bg-gidi-green; }
+  .feature-hero h2 { @apply relative z-10 m-0 text-2xl font-black leading-tight tracking-[-.04em] md:text-4xl; }
+  .feature-hero p { @apply relative z-10 mt-1 max-w-2xl leading-7 text-gidi-chalk/60; }
+
+  .rider-home-grid { @apply grid gap-4 xl:grid-cols-3; }
+  .rider-hero { @apply col-span-full grid items-center gap-4 rounded-[2rem] p-6 xl:grid-cols-[1fr_minmax(320px,470px)]; background: linear-gradient(135deg, rgba(246,185,26,.11), rgba(18,29,26,.96)); }
+  .rider-hero h2 { @apply m-0 text-3xl font-black leading-tight tracking-[-.04em] md:text-5xl; }
+  .rider-hero p, .rider-feature-card p { @apply leading-7 text-gidi-chalk/60; }
+  .hero-actions { @apply mt-5 flex flex-wrap gap-3; }
+  .rider-feature-card { @apply rounded-[1.6rem] p-5; }
+  .rider-feature-card > span { @apply grid h-11 w-11 place-items-center rounded-2xl bg-gidi-yellow font-black text-gidi-ink; box-shadow: 5px 5px 0 rgba(0,0,0,.25); }
+  .rider-feature-card h3 { @apply my-4 mb-2 text-2xl font-black tracking-[-.04em]; }
+  .book-ride-grid { @apply grid items-start gap-4 xl:grid-cols-[minmax(320px,560px)_1fr]; }
+  .booking-panel { @apply rounded-[2rem] p-5; }
+  .booking-side { @apply grid gap-4; }
+  .booking-panel h2, .tracking-panel h2, .empty-current-ride h2, .rider-identity-card h2 { @apply m-0 text-2xl font-black leading-tight tracking-[-.04em] md:text-4xl; }
+  .booking-panel label, .rider-settings-form label { @apply grid gap-2; }
+  .booking-panel label span, .rider-settings-form label span { @apply text-sm font-black text-gidi-chalk; }
+  .payment-row { @apply my-4 flex flex-wrap gap-2; }
+  .payment-row button { @apply rounded-full border-2 border-white/10 bg-white/[.04] px-4 py-2 font-black text-gidi-chalk/60; }
+  .payment-row button.active { @apply border-gidi-green bg-gidi-green text-gidi-ink; }
+  .toggle-row { @apply my-3 flex items-center gap-3 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .toggle-row input[type='checkbox'] { @apply h-6 w-11 shrink-0 appearance-none rounded-full border border-white/10 bg-white/15 p-0 transition before:block before:h-5 before:w-5 before:translate-x-0 before:rounded-full before:bg-gidi-chalk before:transition checked:bg-gidi-green checked:before:translate-x-5; }
+  .fare-card { @apply rounded-[2rem] p-5; }
+  .fare-total { @apply mb-4 flex items-end justify-between gap-4 border-b border-white/10 pb-4; }
+  .fare-total span { @apply font-black text-gidi-chalk/60; }
+  .fare-total strong { @apply text-3xl font-black leading-none tracking-[-.05em] text-gidi-yellow md:text-4xl; }
+  .fare-lines { @apply grid gap-2; }
+  .fare-lines span { @apply flex justify-between gap-4 border-b border-dashed border-white/10 pb-2 text-gidi-chalk/60; }
+  .fare-lines b { @apply text-gidi-chalk; }
+
+  .lagos-map { @apply relative min-h-[460px] overflow-hidden rounded-[2rem] border-2 border-white/10; background: radial-gradient(circle at 62% 62%, rgba(41,154,203,.22), transparent 22%), linear-gradient(135deg, #10221f 0%, #0b1513 52%, #07100f 100%); }
+  .lagos-map.compact { @apply min-h-[340px]; }
+  .map-grid-lines { @apply absolute inset-0 opacity-20; background-image: linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.10) 1px, transparent 1px); background-size: 42px 42px; }
+  .map-water { @apply absolute -bottom-[10%] -right-[5%] grid h-[56%] w-[58%] place-items-center rounded-tl-full border-2 border-sky-300/20 bg-sky-400/20 font-black text-white/40; }
+  .mainland-label, .island-label { @apply absolute text-xs font-black uppercase tracking-widest text-white/30; }
+  .hood-label { @apply absolute z-[2] rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[.65rem] font-black text-gidi-chalk/45; }
+  .mainland-label { @apply left-[9%] top-[12%]; } .island-label { @apply bottom-[22%] right-[16%]; }
+  .road-line { @apply absolute h-3 rounded-full bg-white/15; box-shadow: 0 0 0 2px rgba(0,0,0,.2); }
+  .road-one { @apply left-[7%] top-[37%] w-[85%]; transform: rotate(-14deg); }
+  .road-two { @apply left-[18%] top-[62%] w-[70%]; transform: rotate(20deg); }
+  .road-three { @apply left-[3%] top-[73%] w-[60%]; transform: rotate(-7deg); }
+  .road-four { @apply left-[24%] top-[28%] w-[58%] bg-gidi-green/20; transform: rotate(35deg); }
+  .third-mainland { @apply absolute left-[43%] top-[50%] text-xs font-black text-gidi-yellow/70; transform: rotate(43deg); }
+  .route-beam { @apply absolute left-[22%] right-[18%] top-[49%] h-1 rounded-full bg-gradient-to-r from-gidi-green to-gidi-yellow; transform: rotate(14deg); box-shadow: 0 0 28px rgba(24,212,99,.35); }
+  .map-pin { @apply absolute z-[3] grid -translate-x-1/2 -translate-y-1/2 justify-items-center gap-1; }
+  .map-pin b { @apply grid h-9 w-9 place-items-center rounded-full font-black text-gidi-ink; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+  .map-pin small { @apply whitespace-nowrap rounded-full bg-black/40 px-2 py-1 text-xs font-black text-gidi-chalk; }
+  .map-pin.pickup b { @apply bg-gidi-green; } .map-pin.dropoff b { @apply bg-gidi-yellow; }
+  .driver-dot { @apply absolute z-[4] flex items-center gap-1 rounded-full border-2 border-white/15 bg-gidi-ink px-3 py-1 text-xs font-black text-gidi-chalk; transform: translate(32%,32%); }
+  .driver-dot i { @apply inline-block h-3 w-3 rounded-full bg-gidi-yellow; }
+  .map-card-mini { @apply absolute bottom-4 left-4 z-[5] grid gap-1 rounded-2xl border border-white/10 bg-black/45 px-4 py-3 backdrop-blur; }
+  .map-card-mini strong { @apply text-sm font-black text-gidi-chalk; }
+  .map-card-mini small { @apply text-xs text-gidi-chalk/55; }
+
+  .tracking-grid { @apply grid items-stretch gap-4 xl:grid-cols-[1fr_minmax(320px,430px)]; }
+  .tracking-map-card { @apply rounded-[2rem] p-3; }
+  .tracking-map-card .lagos-map { @apply min-h-[620px]; }
+  .tracking-panel { @apply grid content-start gap-4 rounded-[2rem] p-5; }
+  .tracking-panel p { @apply leading-7 text-gidi-chalk/60; }
+  .tracking-status-row { @apply flex items-center justify-between gap-3; }
+  .socket-pill { @apply rounded-full border border-white/15 bg-white/[.04] px-3 py-1 text-xs font-black text-gidi-chalk/60; }
+  .socket-pill.connected { @apply border-gidi-green/35 bg-gidi-green/10 text-green-100; }
+  .driver-card-mini { @apply flex items-center gap-3 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .driver-card-mini > span { @apply grid h-12 w-12 place-items-center rounded-2xl bg-gidi-yellow text-xl font-black text-gidi-ink; }
+  .driver-card-mini small { @apply mt-1 block text-gidi-chalk/60; }
+  .tracking-lines { @apply rounded-2xl border-2 border-white/10 p-3; }
+  .safety-strip { @apply flex flex-wrap gap-2; }
+  .safety-strip span { @apply rounded-full border border-gidi-green/30 bg-gidi-green/10 px-3 py-1 text-xs font-black text-green-100; }
+  .ride-timeline { @apply grid grid-cols-5 gap-1; }
+  .ride-timeline span { @apply rounded-xl border border-white/10 bg-white/[.03] px-1 py-2 text-center text-[.65rem] font-black capitalize text-gidi-chalk/60; }
+  .ride-timeline span.current { @apply border-gidi-yellow bg-gidi-yellow text-gidi-ink; }
+  .event-feed { @apply grid gap-2 rounded-2xl border-2 border-white/10 bg-white/[.025] p-3; }
+  .event-feed div { @apply grid gap-1 border-l-4 border-sky-300 pl-3; }
+  .event-feed div.green { @apply border-l-gidi-green; } .event-feed div.yellow { @apply border-l-gidi-yellow; } .event-feed div.red { @apply border-l-gidi-red; }
+  .event-feed small { @apply leading-5 text-gidi-chalk/60; }
+  .empty-current-ride { @apply mx-auto grid w-[min(740px,100%)] place-items-center gap-3 rounded-[2rem] p-8 text-center; }
+  .empty-current-ride img { @apply w-44; }
+
+  .rider-profile-grid, .payments-grid, .wallet-grid { @apply grid items-start gap-4 xl:grid-cols-[minmax(260px,380px)_1fr]; }
+  .wallet-grid { @apply xl:grid-cols-[minmax(280px,430px)_1fr]; }
+  .rider-identity-card { @apply grid justify-items-start gap-3; }
+  .rider-identity-card img { @apply w-44 justify-self-center; }
+  .rider-identity-card p { @apply text-gidi-chalk/60; }
+  .rider-identity-card span { @apply rounded-full border border-gidi-green/30 bg-gidi-green/10 px-3 py-1 font-black text-green-100; }
+  .wallet-balance-card { @apply grid min-h-[300px] content-end gap-2 rounded-[2rem] border-gidi-green/25 p-6; background: radial-gradient(circle at 78% 22%, rgba(24,212,99,.18), transparent 35%), linear-gradient(180deg, rgba(18,29,26,.96), rgba(8,14,13,.98)); }
+  .wallet-balance-card span, .wallet-balance-card small { @apply font-black text-gidi-chalk/60; }
+  .wallet-balance-card strong { @apply text-4xl font-black leading-none tracking-[-.07em] text-gidi-green md:text-6xl; }
+  .topup-card, .add-card-card, .payout-list-card { @apply grid content-start gap-4; }
+  .wallet-table-wrap { @apply mt-4 rounded-2xl shadow-none; }
+  .payment-methods-card h2 { @apply m-0 text-5xl font-black tracking-[-.06em]; }
+  .payment-methods-card p { @apply leading-7 text-gidi-chalk/60; }
+  .method-list, .mini-driver-list { @apply mt-4 grid gap-3; }
+  .method-list div, .mini-driver-list div { @apply rounded-2xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .method-list strong { @apply text-gidi-chalk; } .method-list span, .method-list small { @apply text-gidi-chalk/60; }
+
+  .pricing-rule-grid { @apply grid gap-4 xl:grid-cols-3; }
+  .pricing-rule-card { @apply grid gap-4 rounded-[1.75rem] border-2 border-white/10 bg-gidi-road p-5 shadow-gidi; }
+  .pricing-rule-card label, .hot-zone-row label { @apply grid gap-2; }
+  .pricing-rule-card label span, .hot-zone-row label span { @apply text-sm font-black text-gidi-chalk; }
+  .pricing-rule-card small { @apply text-gidi-chalk/60; }
+  .pricing-toggle { @apply m-0 min-w-[210px]; }
+  .hot-zone-list { @apply mt-4 grid gap-3; }
+  .hot-zone-row { @apply grid items-end gap-4 rounded-2xl border-2 border-white/10 bg-white/[.03] p-3 md:grid-cols-[1fr_180px_150px]; }
+
+  .kyc-review-grid { @apply grid gap-4 xl:grid-cols-2; }
+  .kyc-review-card { @apply grid gap-4 rounded-[1.75rem] border-2 border-gidi-yellow/25 bg-gidi-road p-5 shadow-gidi; }
+  .document-strip { @apply flex flex-wrap gap-2; }
+  .document-strip span { @apply rounded-full border border-gidi-yellow/25 bg-gidi-yellow/10 px-3 py-1 text-sm font-black text-yellow-100; }
+  .empty-kyc { @apply font-black text-gidi-chalk/60; }
+
+
+
+  .command-backdrop { @apply fixed inset-0 z-[90] grid place-items-start justify-center bg-black/60 p-4 pt-[12vh] backdrop-blur-sm; }
+  .command-panel { @apply w-[min(720px,100%)] overflow-hidden rounded-[2rem] border-2 border-white/10 bg-gidi-road/95 shadow-gidi; }
+  .command-input-row { @apply flex items-center gap-3 border-b border-white/10 p-4; }
+  .command-input-row span { @apply flex items-center gap-2 rounded-xl bg-gidi-yellow px-3 py-2 text-xs font-black text-gidi-ink; }
+  .command-input-row input { @apply border-0 bg-transparent p-0 text-base focus:ring-0; }
+  .command-results { @apply grid max-h-[460px] gap-1 overflow-auto p-2; }
+  .command-results button { @apply flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white/[.06]; }
+  .command-results button > span { @apply grid h-10 w-10 place-items-center rounded-xl bg-white/10 font-black text-gidi-yellow; }
+  .command-results strong { @apply block font-black; }
+  .command-results small { @apply text-xs text-gidi-chalk/45; }
+  .command-empty { @apply p-8 text-center font-black text-gidi-chalk/50; }
+
+  .mobile-bottom-nav { @apply fixed bottom-3 left-1/2 z-[65] hidden w-[min(520px,calc(100vw-1rem))] -translate-x-1/2 grid-cols-6 rounded-[1.5rem] border-2 border-white/10 bg-gidi-road/95 p-2 shadow-gidi backdrop-blur; }
+  .mobile-bottom-nav a { @apply grid place-items-center gap-1 rounded-2xl px-2 py-2 text-gidi-chalk/50 transition; }
+  .mobile-bottom-nav a span { @apply text-base font-black; }
+  .mobile-bottom-nav a small { @apply text-[.65rem] font-black; }
+  .mobile-bottom-nav a.active { @apply bg-gidi-yellow text-gidi-ink; }
+
+  .toast-viewport { @apply fixed right-4 top-4 z-[80] grid w-[min(380px,calc(100vw-2rem))] gap-3; }
+  .toast-card { @apply relative grid gap-1 rounded-3xl border-2 border-white/10 bg-gidi-road/95 p-4 pr-12 shadow-gidi backdrop-blur; animation: rise 220ms ease-out both; }
+  .toast-card strong { @apply font-black text-gidi-chalk; }
+  .toast-card small { @apply leading-5 text-gidi-chalk/60; }
+  .toast-card button { @apply absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-white/10 font-black text-gidi-chalk/70 hover:bg-white/20; }
+  .toast-card.success { @apply border-gidi-green/40; }
+  .toast-card.warning { @apply border-gidi-yellow/45; }
+  .toast-card.danger { @apply border-gidi-red/45; }
+
+  .field-error { @apply text-xs font-bold text-red-200; }
+  .password-field { @apply relative; }
+
+
+  .command-backdrop { @apply fixed inset-0 z-[90] grid place-items-start justify-center bg-black/60 p-4 pt-[12vh] backdrop-blur-sm; }
+  .command-panel { @apply w-[min(720px,100%)] overflow-hidden rounded-[2rem] border-2 border-white/10 bg-gidi-road/95 shadow-gidi; }
+  .command-input-row { @apply flex items-center gap-3 border-b border-white/10 p-4; }
+  .command-input-row span { @apply flex items-center gap-2 rounded-xl bg-gidi-yellow px-3 py-2 text-xs font-black text-gidi-ink; }
+  .command-input-row input { @apply border-0 bg-transparent p-0 text-base focus:ring-0; }
+  .command-results { @apply grid max-h-[460px] gap-1 overflow-auto p-2; }
+  .command-results button { @apply flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white/[.06]; }
+  .command-results button > span { @apply grid h-10 w-10 place-items-center rounded-xl bg-white/10 font-black text-gidi-yellow; }
+  .command-results strong { @apply block font-black; }
+  .command-results small { @apply text-xs text-gidi-chalk/45; }
+  .command-empty { @apply p-8 text-center font-black text-gidi-chalk/50; }
+
+  .mobile-bottom-nav { @apply fixed bottom-3 left-1/2 z-[65] grid lg:hidden w-[min(520px,calc(100vw-1rem))] -translate-x-1/2 grid-cols-6 rounded-[1.5rem] border-2 border-white/10 bg-gidi-road/95 p-2 shadow-gidi backdrop-blur; }
+  .mobile-bottom-nav a { @apply grid place-items-center gap-1 rounded-2xl px-2 py-2 text-gidi-chalk/50 transition; }
+  .mobile-bottom-nav a span { @apply text-base font-black; }
+  .mobile-bottom-nav a small { @apply text-[.65rem] font-black; }
+  .mobile-bottom-nav a.active { @apply bg-gidi-yellow text-gidi-ink; }
+
+  .toast-viewport { @apply fixed right-4 top-4 z-[80] grid w-[min(380px,calc(100vw-2rem))] gap-3; }
+  .toast-card { @apply relative grid gap-1 rounded-3xl border-2 border-white/10 bg-gidi-road/95 p-4 pr-12 shadow-gidi backdrop-blur; animation: rise 220ms ease-out both; }
+  .toast-card strong { @apply font-black text-gidi-chalk; }
+  .toast-card small { @apply leading-5 text-gidi-chalk/60; }
+  .toast-card button { @apply absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-white/10 font-black text-gidi-chalk/70 hover:bg-white/20; }
+  .toast-card.success { @apply border-gidi-green/40; }
+  .toast-card.warning { @apply border-gidi-yellow/45; }
+  .toast-card.danger { @apply border-gidi-red/45; }
+
+  .password-field input { @apply pr-20; }
+
+
+  .command-backdrop { @apply fixed inset-0 z-[90] grid place-items-start justify-center bg-black/60 p-4 pt-[12vh] backdrop-blur-sm; }
+  .command-panel { @apply w-[min(720px,100%)] overflow-hidden rounded-[2rem] border-2 border-white/10 bg-gidi-road/95 shadow-gidi; }
+  .command-input-row { @apply flex items-center gap-3 border-b border-white/10 p-4; }
+  .command-input-row span { @apply flex items-center gap-2 rounded-xl bg-gidi-yellow px-3 py-2 text-xs font-black text-gidi-ink; }
+  .command-input-row input { @apply border-0 bg-transparent p-0 text-base focus:ring-0; }
+  .command-results { @apply grid max-h-[460px] gap-1 overflow-auto p-2; }
+  .command-results button { @apply flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white/[.06]; }
+  .command-results button > span { @apply grid h-10 w-10 place-items-center rounded-xl bg-white/10 font-black text-gidi-yellow; }
+  .command-results strong { @apply block font-black; }
+  .command-results small { @apply text-xs text-gidi-chalk/45; }
+  .command-empty { @apply p-8 text-center font-black text-gidi-chalk/50; }
+
+  .mobile-bottom-nav { @apply fixed bottom-3 left-1/2 z-[65] hidden w-[min(520px,calc(100vw-1rem))] -translate-x-1/2 grid-cols-6 rounded-[1.5rem] border-2 border-white/10 bg-gidi-road/95 p-2 shadow-gidi backdrop-blur; }
+  .mobile-bottom-nav a { @apply grid place-items-center gap-1 rounded-2xl px-2 py-2 text-gidi-chalk/50 transition; }
+  .mobile-bottom-nav a span { @apply text-base font-black; }
+  .mobile-bottom-nav a small { @apply text-[.65rem] font-black; }
+  .mobile-bottom-nav a.active { @apply bg-gidi-yellow text-gidi-ink; }
+  .mobile-bottom-nav button { @apply grid place-items-center gap-1 rounded-2xl px-2 py-2 text-gidi-chalk/50 transition; }
+  .mobile-bottom-nav button small { @apply text-[.65rem] font-black; }
+  .mobile-bottom-nav button.more-active { @apply bg-gidi-yellow text-gidi-ink; }
+  .mobile-more-sheet {
+    @apply fixed bottom-[4.75rem] left-1/2 z-[64] flex w-[min(320px,calc(100vw-1.5rem))] -translate-x-1/2 flex-col gap-1 rounded-[1.5rem] border-2 border-white/10 bg-gidi-road/95 p-2 shadow-gidi backdrop-blur;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .mobile-more-sheet a { @apply flex items-center gap-3 rounded-2xl px-3 py-3 font-bold text-gidi-chalk/80; }
+  .mobile-more-sheet a.active { @apply bg-gidi-yellow text-gidi-ink; }
+
+  .toast-viewport { @apply fixed right-4 top-4 z-[80] grid w-[min(380px,calc(100vw-2rem))] gap-3; }
+  .toast-card { @apply relative grid gap-1 rounded-3xl border-2 border-white/10 bg-gidi-road/95 p-4 pr-12 shadow-gidi backdrop-blur; animation: rise 220ms ease-out both; }
+  .toast-card strong { @apply font-black text-gidi-chalk; }
+  .toast-card small { @apply leading-5 text-gidi-chalk/60; }
+  .toast-card button { @apply absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-white/10 font-black text-gidi-chalk/70 hover:bg-white/20; }
+  .toast-card.success { @apply border-gidi-green/40; }
+  .toast-card.warning { @apply border-gidi-yellow/45; }
+  .toast-card.danger { @apply border-gidi-red/45; }
+
+  .password-field button { @apply absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1 rounded-xl bg-white/10 px-3 py-2 text-xs font-black text-gidi-yellow transition hover:bg-gidi-yellow hover:text-gidi-ink; }
+
+  /* Staggered card entrance animations */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stats-grid > *, .driver-page-grid > *, .rider-home-grid > *, .request-grid > * {
+    animation: cardIn 420ms cubic-bezier(.2,.8,.2,1) both;
+  }
+  .stats-grid > *:nth-child(1) { animation-delay: 0ms; }
+  .stats-grid > *:nth-child(2) { animation-delay: 60ms; }
+  .stats-grid > *:nth-child(3) { animation-delay: 120ms; }
+  .stats-grid > *:nth-child(4) { animation-delay: 180ms; }
+
+  /* Animated route beam pulse on map */
+  .route-beam {
+    animation: beamPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes beamPulse {
+    0%, 100% { opacity: .7; filter: blur(0); }
+    50% { opacity: 1; filter: blur(1px); box-shadow: 0 0 36px rgba(24,212,99,.5); }
+  }
+
+  /* Map pin glow */
+  .map-pin.pickup b { box-shadow: 0 0 0 6px rgba(24,212,99,.2), 0 8px 18px rgba(0,0,0,.35); }
+  .map-pin.dropoff b { box-shadow: 0 0 0 6px rgba(246,185,26,.2), 0 8px 18px rgba(0,0,0,.35); }
+
+  /* Toast icons */
+  .toast-card.success::before { content: '✓'; @apply absolute left-4 top-4 grid h-7 w-7 place-items-center rounded-full bg-gidi-green/20 text-sm font-black text-gidi-green; }
+  .toast-card.warning::before { content: '⚠'; @apply absolute left-4 top-4 grid h-7 w-7 place-items-center rounded-full bg-gidi-yellow/20 text-sm text-gidi-yellow; }
+  .toast-card.danger::before { content: '✕'; @apply absolute left-4 top-4 grid h-7 w-7 place-items-center rounded-full bg-gidi-red/20 text-sm font-black text-gidi-red; }
+  .toast-card.success, .toast-card.warning, .toast-card.danger { @apply pl-14; }
+
+  /* Button press ripple */
+  .btn:active:not(:disabled) { transition-duration: 60ms; }
+
+  /* Subtle role-specific accent in sidebar */
+  .driver-rail { border-right-color: rgba(24,212,99,.2); }
+  .rider-rail { border-right-color: rgba(246,185,26,.2); }
+
+}
+
+@layer utilities {
+  .hard-shadow { box-shadow: 9px 9px 0 rgba(0,0,0,.38); }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes pulse { 0%,100% { transform: scale(.9); opacity:.7; } 50% { transform: scale(1.06); opacity:1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes loadingBar { 0% { transform: translateX(-100%); width: 40%; } 50% { width: 75%; } 100% { transform: translateX(260%); width: 42%; } }
+
+@media (max-width: 1024px) {
+  .auth-shell { @apply grid-cols-1; }
+  .auth-poster { @apply min-h-0; }
+  .register-shell .auth-poster { @apply hidden; }
+  .admin-shell, .driver-app-shell, .rider-app-shell { @apply grid-cols-1; }
+  .admin-sidebar, .driver-rail, .rider-rail { @apply static h-auto min-h-0 border-r-0 border-b-2; }
+  .sidebar-nav, .driver-nav, .rider-nav { @apply flex overflow-x-auto overflow-y-hidden pb-1; max-height: none; }
+  .sidebar-nav a, .driver-nav a, .rider-nav a { @apply whitespace-nowrap; }
+  .sidebar-note, .driver-rail-card, .rider-safety-card { @apply hidden; }
+  .dashboard-hero, .driver-hero, .rider-hero, .book-ride-grid, .tracking-grid, .rider-profile-grid, .payments-grid, .wallet-grid { @apply grid-cols-1; }
+}
+
+@media (max-width: 640px) {
+  body::before { background-size: 48px 48px; }
+  .auth-shell { @apply w-[calc(100%-0.5rem)] py-2; }
+  .auth-poster { @apply hidden; }
+  .mobile-brand { @apply flex; }
+  .auth-panel { @apply rounded-[1.75rem]; }
+  .admin-main, .driver-main, .rider-main { @apply px-3 py-4; }
+  .admin-topbar, .driver-topbar, .rider-topbar, .section-heading { @apply flex-col items-start; }
+  .topbar-user { @apply w-full justify-between; }
+  .stats-grid, .driver-page-grid, .upload-grid, .pricing-rule-grid { @apply grid-cols-1; }
+  .hero-actions, .request-actions, .modal-actions { @apply flex-col; }
+  .hero-actions .btn, .request-actions .btn, .modal-actions .btn { @apply w-full; }
+  .lagos-map, .tracking-map-card .lagos-map { @apply min-h-[360px]; }
+  .mobile-bottom-nav { @apply grid; }
+  .rider-nav, .driver-nav { @apply hidden; }
+  .rider-rail, .driver-rail { @apply gap-0 border-b-0 p-3; }
+  .rider-safety-card, .driver-rail-card { @apply hidden; }
+  .profile-dropdown, .notification-panel {
+    position: fixed;
+    left: 50%;
+    right: auto;
+    top: 4.5rem;
+    transform: translateX(-50%);
+  }
+  .driver-main, .rider-main { @apply pb-28; }
+  .payment-row button { @apply flex-1; }
+  .gidi-table { min-width: 0; }
+  .gidi-table thead { @apply hidden; }
+  .gidi-table, .gidi-table tbody, .gidi-table tr, .gidi-table td { @apply block w-full; }
+  .gidi-table tr { @apply mb-3 rounded-3xl border-2 border-white/10 bg-white/[.03] p-3; }
+  .gidi-table td { @apply flex items-start justify-between gap-4 border-b border-white/10 px-1 py-3 text-right; }
+  .gidi-table td::before { content: attr(data-label); @apply max-w-[45%] text-left text-xs font-black uppercase tracking-wider text-gidi-chalk/45; }
+  .gidi-table td:last-child { @apply border-b-0; }
+}
+
+@layer components {
+  .rider-main h3, .driver-main h3, .admin-main h3 { @apply leading-tight; }
+  .rider-main p, .driver-main p, .admin-main p { @apply max-w-prose; }
+}
+
+/* Dark mode invert for detailed OSM tiles */
+.leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
