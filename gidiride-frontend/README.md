@@ -234,3 +234,5 @@ All phases share the same route tree, auth context, API client, local mock store
 - The old fake auto-match to Kunle is disabled; a logged-in driver must accept the request.
 - Cleaned visible page copy that mentioned backend/workshop implementation details.
 - SOS currently creates in-app/admin safety alerts; real emergency delivery needs backend SMS/push/audio services.
+#   G i d i R i d e  
+ 
